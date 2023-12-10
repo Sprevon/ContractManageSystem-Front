@@ -18,7 +18,7 @@ export default defineComponent({
 
 <template>
   <div>
-    <el-image src="photo1.png" fit="cover" class="header-image"></el-image>
+    <el-image src="ppt5.png" fit="cover" class="header-image"></el-image>
     <div class="empty-box"></div>
     <el-row :gutter="20">
       <el-col :span="4">

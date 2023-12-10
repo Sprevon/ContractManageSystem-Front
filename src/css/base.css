@@ -8,3 +8,8 @@ a{
     text-decoration: none;
     color: inherit;
 }
+
+.el-button--primary{
+    /*color:#EF7814*/
+    /*background-color: #EF7814;*/
+}

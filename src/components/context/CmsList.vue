@@ -145,7 +145,12 @@ export default defineComponent({
             <el-col :span="2">
               <el-button plain type="primary">新增资源</el-button>
             </el-col>
-            <el-col :span="14"></el-col>
+            <el-col :span="2">
+              <router-link to="/cmsBoard">
+                <el-button plain type="primary">数据看板</el-button>
+              </router-link>
+            </el-col>
+            <el-col :span="12"></el-col>
             <el-col :span="4">
               <el-button type="primary" @click="getList">合同查询</el-button>
             </el-col>
@@ -177,24 +182,55 @@ export default defineComponent({
             <template #default="scope">
               <el-row :gutter="5">
                 <el-col span="4">
-                  <el-icon :size="25">
-                    <CreditCard/>
-                  </el-icon>
+                  <el-tooltip
+                      class="box-item"
+                      content="合同发票"
+                      effect="dark"
+                      placement="bottom-start"
+                  >
+                    <el-icon :size="25">
+                      <CreditCard/>
+                    </el-icon>
+                  </el-tooltip>
                 </el-col>
+
                 <el-col span="4">
-                  <el-icon :size="25">
-                    <Edit/>
-                  </el-icon>
+                  <el-tooltip
+                      class="box-item"
+                      content="合同编辑"
+                      effect="dark"
+                      placement="bottom-start"
+                  >
+                    <el-icon :size="25">
+                      <Edit/>
+                    </el-icon>
+                  </el-tooltip>
                 </el-col>
+
                 <el-col span="4">
-                  <el-icon :size="25">
-                    <InfoFilled/>
-                  </el-icon>
+                  <el-tooltip
+                      class="box-item"
+                      content="合同详细"
+                      effect="dark"
+                      placement="bottom-start"
+                  >
+                    <el-icon :size="25">
+                      <InfoFilled/>
+                    </el-icon>
+                  </el-tooltip>
                 </el-col>
+
                 <el-col span="4">
-                  <el-icon :size="25" @click="deleteCms(scope.row.contractId)">
-                    <DeleteFilled/>
-                  </el-icon>
+                  <el-tooltip
+                      class="box-item"
+                      content="删除合同"
+                      effect="dark"
+                      placement="bottom-start"
+                  >
+                    <el-icon :size="25" @click="deleteCms(scope.row.contractId)">
+                      <DeleteFilled/>
+                    </el-icon>
+                  </el-tooltip>
                 </el-col>
               </el-row>
             </template>

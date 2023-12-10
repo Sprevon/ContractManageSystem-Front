@@ -15,6 +15,8 @@ import CmsList from "@/components/context/CmsList.vue";
 import CmsEdit from "@/components/context/CmsEdit.vue";
 import InvoiceCreate from "@/components/context/InvoiceCreate.vue";
 import InvoiceEdit from "@/components/context/InvoiceEdit.vue";
+import echarts from 'echarts'
+import CmsBoard from "@/components/context/CmsBoard.vue";
 
 //创建容器
 const app = createApp(App)
@@ -33,6 +35,10 @@ for (const [key, component] of Object.entries(ElementPlusIconsVue)) {
 library.add(faCircleUser)
 app.component('font-awesome-icon', FontAwesomeIcon)
 
+//引入echarts
+app.config.globalProperties.$echarts = echarts
+
+
 //配置router
 const routes = [
     {path: '/', redirect: '/cmsList'},
@@ -41,7 +47,8 @@ const routes = [
     {path: '/cmsCreate', component: CmsCreate},
     {path: '/cmsEdit', component: CmsEdit},
     {path: '/invoiceCreate', component: InvoiceCreate},
-    {path: '/invoiceEdit', component: InvoiceEdit}
+    {path: '/invoiceEdit', component: InvoiceEdit},
+    {path: '/cmsBoard', component: CmsBoard},
 ]
 const router = createRouter({
     history: createWebHashHistory(),
