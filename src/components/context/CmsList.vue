@@ -54,27 +54,45 @@ export default defineComponent({
         return 'success';
       }
     },
+    turnDetails(contractId){
+      this.$router.push({
+        path: `/cmsDetails/${contractId}`
+      })
+    },
     changeNo(pageNo) {
       this.cmsQueryData.pageNo = pageNo;
       this.getList();
     },
     //删除订单
     deleteCms(contractId) {
-      this.$http.post("/cms/deleteCms", {contractId: contractId}).then(response => {
-        const code = response.data.code;
-        if (code === 200) {
-          ElMessageBox.alert("操作成功", "提示", {
-            confirmButtonText: "确定"
-          }).then(r => {
-            return r;
-          })
-        } else {
-          ElMessageBox.alert("操作失败", "提示", {
-            confirmButtonText: "确定"
-          })
-        }
+      const alertMessage = "删除单号为" + contractId + "的订单？"
+      ElMessageBox.confirm(alertMessage, "提示", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+      }).then(() => {
+            // console.log('1231231')}
+            this.$http.post("/cms/deleteCms", {contractId: contractId}).then(response => {
+              const code = response.data.code;
+              if (code === 200) {
+                ElMessageBox.alert("操作成功", "提示", {
+                  confirmButtonText: "确定"
+                }).then(r => {
+                  location.reload()
+                  return r
+                })
+              } else {
+                ElMessageBox.alert("操作失败", "提示", {
+                  confirmButtonText: "确定"
+                }).then(r => {
+                  location.reload()
+                  return r
+                })
+              }
+            })
+          }
+      )
+      .catch(() => {
       })
-      location.reload()
     }
   },
   created() {
@@ -82,6 +100,8 @@ export default defineComponent({
   }
 })
 </script>
+
+
 
 <template>
   <div>
@@ -177,24 +197,59 @@ export default defineComponent({
             <template #default="scope">
               <el-row :gutter="5">
                 <el-col span="4">
-                  <el-icon :size="25">
-                    <CreditCard/>
-                  </el-icon>
+                  <el-tooltip
+                      class="box-item"
+                      content="合同发票"
+                      effect="dark"
+                      placement="bottom-start"
+                  >
+                    <el-icon :size="25">
+                      <CreditCard/>
+                    </el-icon>
+                  </el-tooltip>
                 </el-col>
+
                 <el-col span="4">
-                  <el-icon :size="25">
-                    <Edit/>
-                  </el-icon>
+                  <el-tooltip
+                      class="box-item"
+                      content="合同编辑"
+                      effect="dark"
+                      placement="bottom-start"
+                  >
+                    <el-icon :size="25">
+                      <Edit/>
+                    </el-icon>
+                  </el-tooltip>
                 </el-col>
+<!--                <template #default="scope">-->
                 <el-col span="4">
-                  <el-icon :size="25">
-                    <InfoFilled/>
-                  </el-icon>
+<!--                  <router-link to="/cmsDetails/{{scope.row.contractId}}">-->
+                    <el-tooltip
+                        class="box-item"
+                        content="合同详细"
+                        effect="dark"
+                        placement="bottom-start"
+                    >
+                      <el-icon :size="25"
+                              @click="turnDetails(scope.row.contractId)">
+                        <InfoFilled/>
+                      </el-icon>
+                    </el-tooltip>
+<!--                  </router-link>-->
                 </el-col>
+<!--                </template>-->
+
                 <el-col span="4">
-                  <el-icon :size="25" @click="deleteCms(scope.row.contractId)">
-                    <DeleteFilled/>
-                  </el-icon>
+                  <el-tooltip
+                      class="box-item"
+                      content="删除合同"
+                      effect="dark"
+                      placement="bottom-start"
+                  >
+                    <el-icon :size="25" @click="deleteCms(scope.row.contractId)">
+                      <DeleteFilled/>
+                    </el-icon>
+                  </el-tooltip>
                 </el-col>
               </el-row>
             </template>

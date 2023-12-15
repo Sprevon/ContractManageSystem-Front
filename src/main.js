@@ -37,7 +37,7 @@ app.component('font-awesome-icon', FontAwesomeIcon)
 const routes = [
     {path: '/', redirect: '/cmsList'},
     {path: '/cmsList', component: CmsList},
-    {path: '/cmsDetails', component: CmsDetails},
+    {path: '/cmsDetails/:contractId', component: CmsDetails},
     {path: '/cmsCreate', component: CmsCreate},
     {path: '/cmsEdit', component: CmsEdit},
     {path: '/invoiceCreate', component: InvoiceCreate},
@@ -47,6 +47,14 @@ const router = createRouter({
     history: createWebHashHistory(),
     routes,
 })
+router.beforeEach((to, from, next) => {
+    // 在每次导航之前滚动到页面顶部
+    window.scrollTo({
+        top: 0,
+        behavior: 'smooth' // 可选的，使滚动平滑进行
+    });
+    next();
+});
 app.use(router)
 
 //容器挂载
