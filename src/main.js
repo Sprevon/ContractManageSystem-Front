@@ -13,7 +13,6 @@ import CmsCreate from './components/context/CmsCreate.vue'
 import CmsDetails from './components/context/CmsDetails.vue'
 import CmsList from "@/components/context/CmsList.vue";
 import CmsEdit from "@/components/context/CmsEdit.vue";
-import InvoiceCreate from "@/components/context/InvoiceCreate.vue";
 import InvoiceEdit from "@/components/context/InvoiceEdit.vue";
 
 //创建容器
@@ -39,9 +38,8 @@ const routes = [
     {path: '/cmsList', component: CmsList},
     {path: '/cmsDetails/:contractId', component: CmsDetails},
     {path: '/cmsCreate', component: CmsCreate},
-    {path: '/cmsEdit', component: CmsEdit},
-    {path: '/invoiceCreate', component: InvoiceCreate},
-    {path: '/invoiceEdit', component: InvoiceEdit}
+    {path: '/cmsEdit/:contractId', component: CmsEdit},
+    {path: '/invoiceEdit/:contractId', component: InvoiceEdit}
 ]
 const router = createRouter({
     history: createWebHashHistory(),

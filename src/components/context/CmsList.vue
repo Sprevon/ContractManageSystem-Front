@@ -54,11 +54,25 @@ export default defineComponent({
         return 'success';
       }
     },
+    //前往订单详细
     turnDetails(contractId){
       this.$router.push({
         path: `/cmsDetails/${contractId}`
       })
     },
+    //前往订单修改
+    turnEdit(contractId){
+      this.$router.push({
+        path: `/cmsEdit/${contractId}`
+      })
+    },
+    //前往发票界面
+    turnInvoice(contractId){
+      this.$router.push({
+        path: `/invoiceEdit/${contractId}`
+      })
+    },
+
     changeNo(pageNo) {
       this.cmsQueryData.pageNo = pageNo;
       this.getList();
@@ -196,18 +210,6 @@ export default defineComponent({
           <el-table-column label="操作" width="auto">
             <template #default="scope">
               <el-row :gutter="5">
-                <el-col span="4">
-                  <el-tooltip
-                      class="box-item"
-                      content="合同发票"
-                      effect="dark"
-                      placement="bottom-start"
-                  >
-                    <el-icon :size="25">
-                      <CreditCard/>
-                    </el-icon>
-                  </el-tooltip>
-                </el-col>
 
                 <el-col span="4">
                   <el-tooltip
@@ -216,17 +218,33 @@ export default defineComponent({
                       effect="dark"
                       placement="bottom-start"
                   >
-                    <el-icon :size="25">
+                    <el-icon :size="25" @click="turnEdit(scope.row.contractId)">
                       <Edit/>
                     </el-icon>
                   </el-tooltip>
                 </el-col>
+
+
+                <el-col span="4">
+                  <el-tooltip
+                      class="box-item"
+                      content="合同发票"
+                      effect="dark"
+                      placement="bottom-start"
+                  >
+                    <el-icon :size="25" @click="turnInvoice(scope.row.contractId)">
+                      <CreditCard/>
+                    </el-icon>
+                  </el-tooltip>
+                </el-col>
+
+
 <!--                <template #default="scope">-->
                 <el-col span="4">
 <!--                  <router-link to="/cmsDetails/{{scope.row.contractId}}">-->
                     <el-tooltip
                         class="box-item"
-                        content="合同详细"
+                        content="合同审批"
                         effect="dark"
                         placement="bottom-start"
                     >
@@ -258,6 +276,10 @@ export default defineComponent({
       </el-main>
 
 
+
+
+
+
       <el-footer height="auto">
         <el-pagination
             v-model:current-page="this.paginationBean.currentPage"
@@ -273,6 +295,18 @@ export default defineComponent({
     </el-container>
   </div>
 </template>
+
+
+
+
+
+
+
+
+
+
+
+
 
 <style scoped>
 .pagination-in-list {

@@ -5,6 +5,11 @@ import {Search} from "@element-plus/icons-vue";
 export default defineComponent({
   name: "ResourceSelect",
   components: {Search},
+  props:{
+    //在haveExist为true的情况下使用
+    resource: Object,
+    haveExist: Boolean,
+  },
   data() {
     return {
       //查询资源的数据
@@ -15,9 +20,20 @@ export default defineComponent({
       resourceDetail: {},
     }
   },
+  computed:{
+    oldResourceData(){
+      if (this.haveExist){
+        return this.resource;
+      }else {
+        return {}
+      }
+    }
+  },
   methods: {
     //查询资源列表
     queryResourceList() {
+      //排除旧资源
+      // this.queryData.resourceId = this.oldResourceData.resourceId;
       this.$http.post("/cms/queryResource", this.queryData).then(response => {
         const res = response.data;
         this.resourceData.data = res.data;
@@ -50,9 +66,20 @@ export default defineComponent({
       // console.log(Date.toString());
       this.$emit("changeResourceDate", Date.toString());
     }
-  }
+  },
+  created() {
+    // if (this.haveExist){
+    //   this.resourceDetail = this.resource
+    // }
+  },
+
 })
 </script>
+
+
+
+
+
 
 <template>
   <div>
@@ -101,7 +128,8 @@ export default defineComponent({
     </el-table>
 
     <div style="height: 10px"/>
-    <el-text style="margin: 20px" tag="b">已选择资源：</el-text>
+    <el-text style="margin: 20px" tag="b" v-if="!haveExist">已选择资源：</el-text>
+    <el-text style="margin: 20px" tag="b" v-if="haveExist">新——资源：</el-text>
     <div style="height: 8px"/>
     <el-descriptions border>
       <el-descriptions-item label="资源编号">{{ resourceDetail.resourceId }}</el-descriptions-item>
@@ -112,6 +140,19 @@ export default defineComponent({
       <el-descriptions-item label="交货时间">{{ resourceDetail.resourceDate }}</el-descriptions-item>
     </el-descriptions>
     <div class="table-divider"/>
+
+    <el-text style="margin: 20px" tag="b" v-if="haveExist">旧——资源：</el-text>
+    <div style="height: 8px"/>
+    <el-descriptions border>
+      <el-descriptions-item label="资源编号">{{ oldResourceData.resourceId }}</el-descriptions-item>
+      <el-descriptions-item label="资源名称">{{ oldResourceData.resourceName }}</el-descriptions-item>
+      <el-descriptions-item label="资源型号">{{ oldResourceData.resourceSpec }}</el-descriptions-item>
+      <el-descriptions-item label="资源规格">{{ oldResourceData.resourceType }}</el-descriptions-item>
+      <el-descriptions-item label="资源数量">{{ oldResourceData.resourceQuality }}</el-descriptions-item>
+      <el-descriptions-item label="交货时间">{{ oldResourceData.resourceDate }}</el-descriptions-item>
+    </el-descriptions>
+    <div class="table-divider"/>
+
     <el-divider/>
   </div>
 </template>

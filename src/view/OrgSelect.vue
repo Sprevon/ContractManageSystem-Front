@@ -1,7 +1,7 @@
 <script>
 import {defineComponent} from 'vue'
 import {Search} from "@element-plus/icons-vue";
-import OrgSelectDataBean from "@/dataBean/OrgSelectDataBean";
+// import OrgSelectDataBean from "@/dataBean/OrgSelectDataBean";
 
 export default defineComponent({
   name: "OrgSelect",
@@ -9,6 +9,10 @@ export default defineComponent({
   props: {
     orgType: String,
     orgIndex: Number,
+
+    //在haveExist为true的情况下展示orgInfo的数据
+    orgInfo: Object,
+    haveExist: Boolean,
   },
   data() {
     return {
@@ -21,17 +25,29 @@ export default defineComponent({
         total:Number,
         data:[],
       },
-      chosenOrgData: OrgSelectDataBean,
+      chosenOrgData: Object,
+    }
+  },
+
+  computed:{
+    oldOrgData(){
+      if (this.haveExist){
+        return this.orgInfo;
+      }else {
+        return {};
+      }
     }
   },
   methods: {
     //查询单位列表
     queryOrgList() {
+      //如果查询时带有单位编号，则剔除传入的编号
+      // this.queryData.orgId = this.oldOrgData.orgId
       this.$http.post('/cms/queryOrg', this.queryData).then(response => {
         this.orgData = response.data;
       })
     },
-    //查询单位i详细
+    //查询单位详细
     queryOrgDetail(chosenOrgId){
       this.$http.post('/cms/queryOrgDetail', chosenOrgId).then(response =>{
         const responseData = response.data;
@@ -40,6 +56,7 @@ export default defineComponent({
     },
     //处理选择信息
     handleChange(Object) {
+
       const chosenOrgId = {orgId:Object.orgId};
       this.queryOrgDetail(chosenOrgId);
       this.$emit("change", {index:this.orgIndex, value:chosenOrgId.orgId})
@@ -47,8 +64,10 @@ export default defineComponent({
 
   },
   created() {
-    this.chosenOrgData = new OrgSelectDataBean({
-    })
+    // this.chosenOrgData = new OrgSelectDataBean({});
+    // if (this.haveExist){
+    //   this.chosenOrgData = this.orgInfo;
+    // }
   }
 })
 </script>
@@ -81,7 +100,8 @@ export default defineComponent({
     </el-table>
 
     <div style="height: 10px;"></div>
-    <el-text tag="b" style="margin: 20px">已选择{{orgType}}：</el-text>
+    <el-text tag="b" style="margin: 20px" v-if="!haveExist">已选择{{orgType}}：</el-text>
+    <el-text tag="b" style="margin: 20px" v-if="haveExist">新——{{orgType}}：</el-text>
     <div style="height: 8px;"></div>
     <el-descriptions  border>
       <el-descriptions-item label="单位编号">{{chosenOrgData.orgId}}</el-descriptions-item>
@@ -94,6 +114,24 @@ export default defineComponent({
       <el-descriptions-item label="单位银行账号">{{chosenOrgData.orgBankAccount}}</el-descriptions-item>
     </el-descriptions>
     <div class="table-divider"></div>
+
+    <div v-if="this.haveExist">
+      <div style="height: 10px;"></div>
+      <el-text tag="b" style="margin: 20px">旧——{{orgType}}：</el-text>
+      <div style="height: 8px;"></div>
+      <el-descriptions  border>
+        <el-descriptions-item label="单位编号">{{oldOrgData.orgId}}</el-descriptions-item>
+        <el-descriptions-item label="单位名称">{{oldOrgData.orgName}}</el-descriptions-item>
+        <el-descriptions-item label="单位地址">{{oldOrgData.orgAddress}}</el-descriptions-item>
+        <el-descriptions-item label="单位传真">{{oldOrgData.orgFax}}</el-descriptions-item>
+        <el-descriptions-item label="单位法定代表人">{{oldOrgData.orgRepresentName}}</el-descriptions-item>
+        <el-descriptions-item label="单位邮政编号">{{oldOrgData.orgMail}}</el-descriptions-item>
+        <el-descriptions-item label="单位银行账户开户地址">{{oldOrgData.orgBank}}</el-descriptions-item>
+        <el-descriptions-item label="单位银行账号">{{oldOrgData.orgBankAccount}}</el-descriptions-item>
+      </el-descriptions>
+      <div class="table-divider"></div>
+    </div>
+
     <el-divider></el-divider>
   </div>
 </template>
